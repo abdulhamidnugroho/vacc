@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RegistrasiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,11 +21,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('auth')->group(function () {
-    Route::post('/user', [AuthController::class, 'userAuth']);
-    Route::post('/penduduk', [AuthController::class, 'pendudukAuth']);
-    Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::post('/authenticate', [AuthController::class, 'authenticate']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/users', [UserController::class, 'getAllUsers']);
+
+    Route::post('/registrasi', [RegistrasiController::class, 'store']);
 });
 
 
-Route::get('/users', [UserController::class, 'getAllUsers']);
+

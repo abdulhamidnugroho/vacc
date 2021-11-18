@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Penduduk;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -14,23 +15,14 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function userAuth(Request $request)
+    public function authenticate(Request $request)
     {
         $request->validate([
             'email'         => 'required',
             'password'      => 'required',
         ]);
 
-        $y = 1;
-
-        $fn1 = fn($x) => $x + $y;
-        // equivalent to using $y by value:
-        $fn2 = function ($x) use ($y) {
-            return $x + $y;
-        };
-        $customer = User::where('email', $request->email)->with(['fasilitas_kesehatan' => function ($query) {
-            $query->select('id', 'name');
-        }])->first();
+        $customer = User::where('email', $request->email)->with(['fasilitas_kesehatan' => fn($query) => $query->select('id', 'name')])->first();
 
         if (! $customer || ! Hash::check($request->password, $customer->password)) {
             return response()->json([
@@ -51,17 +43,6 @@ class AuthController extends Controller
                 'user'      => $data
             ]
         ], 200);
-    }
-
-    /**
-     * Penduduk Login Handler
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function pendudukAuth(Request $request)
-    {
-        //
     }
 
     /**

@@ -21,6 +21,7 @@ class RegistrasiVaksinTableSeeder extends Seeder
                 'penduduk_id'               => $i,
                 'fasilitas_kesehatan_id'    => random_int(1, 20),
                 'jenis_vaksin_id'           => random_int(1, 3),
+                'user_id'                   => random_int(1, 40),
                 'dosis_ke'                  => 1,
                 'status'                    => random_int(1, 3),
             ];
